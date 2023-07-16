@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const ora = require("ora");
 const cliSpinners = require("cli-spinners");
-const fetch = require("node-fetch");
+const axios = require("axios");
 clear();
 
 const prompt = inquirer.createPromptModule();
@@ -32,29 +32,47 @@ const questions = [
       {
         name: `Download my ${chalk.magentaBright.bold("Resume")}?`,
         value: () => {
-          // cliSpinners.dots;
-          const loader = ora({
-            text: " Downloading Resume",
-            spinner: cliSpinners.material,
-          }).start();
-
-          async function downloadPDF(url, filename) {
-            const response = await fetch(url);
-            const buffer = await response.buffer();
-            fs.writeFile(filename, buffer, () => {
-              console.log(`PDF downloaded successfully: ${filename}`);
+          const downloadPDF = (url, destinationPath) => {
+            return new Promise((resolve, reject) => {
+              axios
+                .get(url, { responseType: "stream" })
+                .then((response) => {
+                  const writeStream = fs.createWriteStream(destinationPath);
+                  response.data.pipe(writeStream);
+                  writeStream.on("finish", resolve);
+                  writeStream.on("error", reject);
+                })
+                .catch(reject);
             });
-          }
+          };
 
-          // Replace 'pdfUrl' with the actual raw URL of the PDF hosted on GitHub
+          // ...
+
+          const downloadResume = async (pdfUrl, outputFilename) => {
+            try {
+              const downloadPath = path.join(process.cwd(), outputFilename);
+
+              const loader = ora({
+                text: " Downloading Resume",
+                spinner: cliSpinners.material,
+              }).start();
+
+              await downloadPDF(pdfUrl, downloadPath);
+
+              loader.succeed("Resume Downloaded!");
+              console.log(`Resume Downloaded at ${downloadPath} \n`);
+            } catch (error) {
+              loader.fail("Failed to download Resume");
+              console.error("Error:", error);
+            }
+          };
+
+          // Example usage
           const pdfUrl =
             "https://raw.githubusercontent.com/akshay-99h/portfolio/main/Akshay%20Prabhat%20Mishra%2015th%20July%202023.pdf";
           const outputFilename = "akshay-resume.pdf";
 
-          downloadPDF(pdfUrl, outputFilename);
-          let downloadPath = path.join(process.cwd(), "akshay-resume.html");
-          console.log(`\nResume Downloaded at ${downloadPath} \n`);
-          loader.stop();
+          downloadResume(pdfUrl, outputFilename);
         },
       },
       {

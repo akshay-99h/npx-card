@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const ora = require("ora");
 const cliSpinners = require("cli-spinners");
-const fetch = import("node-fetch");
+const fetch = require("node-fetch");
 clear();
 
 const prompt = inquirer.createPromptModule();

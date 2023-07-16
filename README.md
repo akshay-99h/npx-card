@@ -3,5 +3,5 @@ This my NPX card unique style to connect with me directly via console or termina
 
 👇 just hit 
 ```bash
-npx akshay_99h
+npx akshay-99h
 ```

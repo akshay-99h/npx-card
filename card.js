@@ -76,9 +76,9 @@ const questions = [
         },
       },
       {
-        name: "Just quit.",
+        name: "Quit card.",
         value: () => {
-          console.log("see you around!\n");
+          console.log("See you around!\n");
         },
       },
     ],

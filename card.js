@@ -69,7 +69,7 @@ const questions = [
 
           // Example usage
           const pdfUrl =
-            "https://raw.githubusercontent.com/akshay-99h/portfolio/main/Akshay%20Prabhat%20Mishra%2015th%20July%202023.pdf";
+            "https://raw.githubusercontent.com/akshay-99h/portfolio/main/Akshay%20Prabhat%20Mishra%20-%20Resume.pdf";
           const outputFilename = "akshay-resume.pdf";
 
           downloadResume(pdfUrl, outputFilename);
